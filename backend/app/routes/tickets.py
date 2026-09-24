@@ -436,7 +436,45 @@ def update_ticket(
 
     db.commit()
 
-    return ticket
+    return {
+    "id": ticket.id,
+    "ticket_number": ticket.ticket_number,
+    "title": ticket.title,
+    "description": ticket.description,
+    "category": ticket.category,
+    "priority": ticket.priority,
+    "status": ticket.status,
+    "student": {
+        "id": ticket.student.id,
+        "name": ticket.student.name,
+        "email": ticket.student.email,
+    },
+    "assigned_to": (
+        {
+            "id": ticket.assignee.id,
+            "name": ticket.assignee.name,
+            "email": ticket.assignee.email,
+        }
+        if ticket.assignee
+        else None
+    ),
+    "created_at": ticket.created_at,
+    "updated_at": ticket.updated_at,
+    "due_at": ticket.due_at,
+    "sla": {
+        "status": get_sla_status(
+            ticket.due_at,
+            ticket.status,
+        ),
+        "age_hours": get_ticket_age(
+            ticket.created_at,
+        ),
+        "hours_remaining": get_hours_remaining(
+            ticket.due_at,
+            ticket.status,
+        ),
+    },
+}
 
 
 # ---------------------------------------------------------

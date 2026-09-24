@@ -114,5 +114,6 @@ def update_user_role(
             "name": user.name,
             "email": user.email,
             "role": user.role,
+            
         },
     }
